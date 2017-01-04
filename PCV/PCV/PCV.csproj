@@ -56,6 +56,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -135,6 +137,24 @@
     <Content Include="WEB\Forms\Lunch.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\comidas.cs" />
+    <Compile Include="Models\COMIDAS_AUX.cs" />
+    <Compile Include="Models\comidas_grupos.cs" />
+    <Compile Include="Models\comidas_opciones_menu.cs" />
+    <Compile Include="Models\empleados.cs" />
+    <Compile Include="Models\empleados_clasificacion.cs" />
+    <Compile Include="Models\empresas_usuarias.cs" />
+    <Compile Include="Models\impresora.cs" />
+    <Compile Include="Models\impresoras.cs" />
+    <Compile Include="Models\mails_envio.cs" />
+    <Compile Include="Models\mails_generacion_reportes.cs" />
+    <Compile Include="Models\pedidos.cs" />
+    <Compile Include="Models\ProcterGambleRepository.cs" />
+    <Compile Include="Models\StoredProceduresClasses\ConsultaEmpleados.cs" />
+    <Compile Include="Models\subsidio.cs" />
+    <Compile Include="Models\sysdiagrams.cs" />
+    <Compile Include="Models\turnos.cs" />
+    <Compile Include="Models\usuarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WEB\Forms\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
@@ -166,12 +186,7 @@
     </Compile>
     <Compile Include="WEB\Objects\Producto.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\PCV\Models\Models.csproj">
-      <Project>{cc25374f-4e54-4484-8610-8f15aa11a41f}</Project>
-      <Name>Models</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
