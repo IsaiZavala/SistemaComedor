@@ -106,20 +106,79 @@
             <h3 class="panel-title">Ventas</h3>
         </div>
         <div class="panel-body">
-            <asp:GridView ID="grdVentas" runat="server" AutoGenerateColumns="false" Width="100%" Height="100px" >
+            <asp:GridView ID="grdVentas" runat="server" AutoGenerateColumns="false" Width="100%" Height="100px"
+                AlternatingRowStyle-BackColor="#C2D69B" 
+                OnRowEditing="grdVentas_RowEditing" 
+                OnRowDataBound="grdVentas_RowDataBound" 
+                OnRowCreated="grdVentas_RowCreated"
+                CssClass="table table-bordered bs-table"
+                
+                >
                 <Columns>
-                    <asp:BoundField DataField="Producto" HeaderText="Producto" />
-                    <asp:BoundField DataField="Cantidad" HeaderText="Cantidad / Kgs." />
-                    <asp:BoundField DataField="Precio" HeaderText="Precio / U." />
-                    <asp:BoundField DataField="Recuperacion" HeaderText="Recuperacion" />
-                    <asp:BoundField DataField="Total" HeaderText="Total" />
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <span>Producto</span>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <asp:DropDownList ID="ddlCodigosComidas" runat="server" AutoPostBack="true" CssClass="form-control" 
+                                OnSelectedIndexChanged="ddlCodigosComidas_SelectedIndexChanged"></asp:DropDownList>     
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <span>Cantidad / Kgs.</span>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                           <asp:TextBox ID="txtCantidad" CssClass="form-control" runat="server" Text='<%# Eval("Cantidad") %>' MaxLength="2"></asp:TextBox> 
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <span>Precio / U.</span>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <asp:TextBox ID="txtPrecio" runat="server" ReadOnly="true" CssClass="form-control" Text='<%# Eval("Precio") %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <span>Recuperación</span>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <asp:TextBox ID="txtRecuperacion" runat="server" CssClass="form-control" ReadOnly="true" Text='<%# Eval("Recuperacion") %>'/>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <HeaderTemplate>
+                            <span>Total</span>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <asp:TextBox ID="txtTotal" runat="server" CssClass="form-control" ReadOnly="true"/>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                     <asp:BoundField DataField="SUBI" HeaderText="SUBI" />
                     <asp:BoundField DataField="IVA" HeaderText="IVA" />
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:Button ID="btnDeleteProducto" CssClass="btn btn-danger" Text="Eliminar" runat="server" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
                 <EmptyDataTemplate>
                     <span>No se encontró informacion</span>
+                    
+                    <asp:Button runat="server" ID="btnInsertar" Text="insertar" CommandName="Insert" />
                 </EmptyDataTemplate>
             </asp:GridView>
+            
+            <div class="row">
+                <div class="col-md-5"></div>
+                <div class="col-md-4">
+                    <asp:Button ID="btnAgregar" Text="Agregar" runat="server" CssClass="btn btn-success" OnClick="btnAgregar_Click" />
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            
 
             <div>
                 <div class="row">
@@ -179,18 +238,13 @@
     <div class="row">
         <div class="col-md-5">
             <div class="input-group">
-                <label class="input-group-addon">Catálogo de comidas</label>
-                <asp:DropDownList ID="ddlCodigosComidas" runat="server" CssClass="form-control"></asp:DropDownList>
             </div>
         </div>
         <div class="col-md-2">
-            <div class="input-group">
-                <label class="input-group-addon">Cantidad</label>
-                <asp:TextBox ID="txtCantidad" runat="server" class="form-control" Text="1" />
-            </div>
+           
         </div>
         <div class="col-md-2">
-            <asp:Button ID="btnAgregar" Text="Agregar" runat="server" CssClass="btn btn-success" OnClick="btnAgregar_Click" />
+            
         </div>
         <div class="col-md-3">
             <div class="input-group">

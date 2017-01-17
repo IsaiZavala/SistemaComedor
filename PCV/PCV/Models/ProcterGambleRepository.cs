@@ -56,7 +56,8 @@ namespace PCV.Models
 
         public List<comidas> ConsultaCatalogoComidas()
         {
-            return comidas.ToList();
+            List<comidas> lstComidas = comidas.OrderBy(m => m.com_descripcion).ToList();
+            return lstComidas;
         }
     }
 }
