@@ -3,8 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">    
-    
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
 <div class="row">
     <div class="col-md-2">
@@ -30,7 +29,7 @@
             </div>
             <div class="col-md-4">
                 <div class="input-group">
-                    <span class="input-group-addon">Ventas</span>
+                    <span class="input-group-addon">Venta</span>
                     <asp:TextBox ID="txtVentas" runat="server" CssClass="form-control" ReadOnly="true"/>
                 </div>
             </div>
@@ -106,14 +105,57 @@
             <h3 class="panel-title">Ventas</h3>
         </div>
         <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-1">
+                    <span>Limit</span>
+                    <br />
+                    <label>SI</label>
+                </div>
+                <div class="col-md-1">
+                    <span>PERC.(%)</span>
+                    <br />
+                    <label>50.00</label>
+                </div>
+                <div class="col-md-1">
+                    <span>S.xCLAS</span>
+                    <br />
+                    <label></label>
+                </div>
+                <div class="col-md-2">
+                    <span>SUBS.xTurno($)</span>
+                    <br />
+                    <asp:TextBox ID="txtSubsXTurno" Text="0.00" runat="server"></asp:TextBox>
+                </div>
+                <div class="col-md-1">
+                    <span>SUBS. A BLO.($)</span>
+                    <br />
+                    <label>0.00</label>
+                </div>
+                <div class="col-md-1">
+                    <span>SUBS. C. BLO.($)</span>
+                    <br />
+                    <label>0.00</label>
+                </div>
+                <div class="col-md-1">
+                    <span>SUBS. TOT.($)</span>
+                    <br />
+                    <label>0.00</label>
+                </div>
+                <div class="col-md-1">
+                    <span>SUBS LATA</span>
+                    <br />
+                    <label style="color:greenyellow">0.00</label>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+
             <asp:GridView ID="grdVentas" runat="server" AutoGenerateColumns="false" Width="100%" Height="100px"
                 AlternatingRowStyle-BackColor="#C2D69B" 
-                OnRowEditing="grdVentas_RowEditing" 
                 OnRowDataBound="grdVentas_RowDataBound" 
-                OnRowCreated="grdVentas_RowCreated"
-                CssClass="table table-bordered bs-table"
-                
-                >
+                ShowFooter="true"
+                CssClass="table table-bordered bs-table">
+                <FooterStyle BackColor="WhiteSmoke" ForeColor="Black" HorizontalAlign="Center" />
                 <Columns>
                     <asp:TemplateField>
                         <HeaderTemplate>
@@ -134,10 +176,13 @@
                     </asp:TemplateField>
                     <asp:TemplateField>
                         <HeaderTemplate>
-                            <span>Precio / U.</span>
+                            <span>Precio / U. ($)</span>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <asp:TextBox ID="txtPrecio" runat="server" ReadOnly="true" CssClass="form-control" Text='<%# Eval("Precio") %>' />
+                            <div class="input-group">
+                                <label class="input-group-addon">$</label>
+                                <asp:TextBox ID="txtPrecio" runat="server" ReadOnly="true" CssClass="form-control" Text='<%# Eval("Precio") %>' />
+                            </div>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
@@ -150,11 +195,20 @@
                     </asp:TemplateField>
                     <asp:TemplateField>
                         <HeaderTemplate>
-                            <span>Total</span>
+                            <span>Subtotal ($)</span>
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <asp:TextBox ID="txtTotal" runat="server" CssClass="form-control" ReadOnly="true"/>
+                            <div class="input-group">
+                                <label class="input-group-addon">$</label>
+                                <asp:TextBox ID="txtSubtotal" runat="server" CssClass="form-control" ReadOnly="true"/>
+                            </div>
                         </ItemTemplate>
+                        <FooterTemplate>
+                            <div class="input-group">
+                                <label class="input-group-addon" aria-readonly="true">$</label>
+                                <asp:TextBox ID="txtTotal" runat="server" ReadOnly="true" CssClass="form-control" Text="0.00"></asp:TextBox>
+                            </div>
+                        </FooterTemplate>
                     </asp:TemplateField>
                     <asp:BoundField DataField="SUBI" HeaderText="SUBI" />
                     <asp:BoundField DataField="IVA" HeaderText="IVA" />
@@ -173,61 +227,11 @@
             
             <div class="row">
                 <div class="col-md-5"></div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <asp:Button ID="btnAgregar" Text="Agregar" runat="server" CssClass="btn btn-success" OnClick="btnAgregar_Click" />
                 </div>
-                <div class="col-md-3"></div>
-            </div>
-            
-
-            <div>
-                <div class="row">
-                    <div class="col-md-1">
-                        <span>Limit</span>
-                        <br />
-                        <label>SI</label>
-                    </div>
-                    <div class="col-md-1">
-                        <span>PERC.(%)</span>
-                        <br />
-                        <label>50.00</label>
-                    </div>
-                    <div class="col-md-1">
-                        <span>S.xCLAS</span>
-                        <br />
-                        <label></label>
-                    </div>
-                    <div class="col-md-2">
-                        <span>SUBS.xTurno($)</span>
-                        <br />
-                        <label>0.00</label>
-                    </div>
-                    <div class="col-md-1">
-                        <span>SUBS. A BLO.($)</span>
-                        <br />
-                        <label>0.00</label>
-                    </div>
-                    <div class="col-md-1">
-                        <span>SUBS. C. BLO.($)</span>
-                        <br />
-                        <label>0.00</label>
-                    </div>
-                    <div class="col-md-1">
-                        <span>SUBS. TOT.($)</span>
-                        <br />
-                        <label>0.00</label>
-                    </div>
-                    <div class="col-md-1">
-                        <span>SUBS LATA</span>
-                        <br />
-                        <label style="color:greenyellow">0.00</label>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="input-group">
-                            <span class="input-group-addon">Subtotal</span>
-                            <input type="text" class="form-control" style="color:greenyellow" value="0.00" />
-                        </div>
-                    </div>
+                <div class="col-md-2">
+                    <asp:Button ID="btnConfirmarCompra" Text="Comprar" CssClass="btn btn-warning" runat="server" />
                 </div>
             </div>
         </div>
@@ -247,10 +251,6 @@
             
         </div>
         <div class="col-md-3">
-            <div class="input-group">
-                <label class="input-group-addon">IVA</label>
-                <asp:TextBox runat="server" CssClass="form-control"></asp:TextBox>
-            </div>
         </div>
     </div>
 </div>
@@ -271,10 +271,6 @@
             <asp:Button runat="server" CssClass="btn" Text="Salir" />
         </div>
         <div class="col-md-3">
-            <div class="input-group">
-                <label class="input-group-addon">Total</label>
-                <input class="form-control" type="text" style="color:greenyellow" value="0.00" />
-            </div>
         </div>
     </div>
 </div>

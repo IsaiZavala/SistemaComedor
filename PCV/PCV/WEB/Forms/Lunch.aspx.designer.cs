@@ -94,6 +94,15 @@ namespace PCV.WEB.Forms {
         protected global::System.Web.UI.WebControls.LinkButton lnkValidarCredencial;
         
         /// <summary>
+        /// Control txtSubsXTurno.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSubsXTurno;
+        
+        /// <summary>
         /// Control grdVentas.
         /// </summary>
         /// <remarks>
@@ -110,5 +119,14 @@ namespace PCV.WEB.Forms {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgregar;
+        
+        /// <summary>
+        /// Control btnConfirmarCompra.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnConfirmarCompra;
     }
 }

@@ -20,8 +20,12 @@ namespace PCV.WEB.Forms
             if (!IsPostBack)
             {
                 List<Producto> lstProductos = new List<Producto>();
-                lstProductos.Add(new Producto() { Cantidad = 1 } ); // Se inicializa con la cantidad de uno
-
+                int NumProd = 4;
+                for (int i = 0; i < NumProd; i++)
+                {
+                    lstProductos.Add(new Producto() { Cantidad = 1 });
+                }
+                
                 grdVentas.DataSource = lstProductos;
                 grdVentas.DataBind();
             }
@@ -48,6 +52,7 @@ namespace PCV.WEB.Forms
             txtTipoEmpleado.Text = empleado.TipoEmpleado;
             txtHorario.Text = empleado.Horario;
             txtSubsidio.Text = empleado.Subsidio;
+            txtSubsXTurno.Text = "" + empleado.CantidadSubsidio;
         }
 
         public void LoadCatalogosComidas()
@@ -96,16 +101,6 @@ namespace PCV.WEB.Forms
             grdVentas.DataBind();
         }
 
-        protected void grdVentas_RowEditing(object sender, GridViewEditEventArgs e)
-        {
-            grdVentas.EditIndex = e.NewEditIndex;
-        }
-
-        protected void grdVentas_RowCreated(object sender, GridViewRowEventArgs e)
-        {
-            
-        }
-
         public List<comidas> lstComidasCache;
         public List<comidas> CatalogosComidasCache()
         {
@@ -130,7 +125,7 @@ namespace PCV.WEB.Forms
             {
                 TextBox txtCantidad = e.Row.FindControl("txtCantidad") as TextBox;
                 TextBox txtPrecio = e.Row.FindControl("txtPrecio") as TextBox;
-                TextBox txtTotal = e.Row.FindControl("txtTotal") as TextBox;
+                TextBox txtSubtotal = e.Row.FindControl("txtSubtotal") as TextBox;
                 DropDownList ddlCodigosComidas = e.Row.FindControl("ddlCodigosComidas") as DropDownList;
 
 
@@ -149,9 +144,20 @@ namespace PCV.WEB.Forms
                     Producto itemProd = e.Row.DataItem as Producto;
                     ddlCodigosComidas.SelectedValue = itemProd.com_id.ToString();
                     txtCantidad.Text = itemProd.Cantidad.ToString();
-                    txtTotal.Text = itemProd.Total.ToString();
+                    txtSubtotal.Text = itemProd.Total.ToString("0.00");
                 }
             }
+            else if (e.Row.RowType == DataControlRowType.Footer)
+            {
+                RecalcularTotalFooter();
+            }
+        }
+
+        public comidas GetComidaById(int com_id)
+        {
+            List<comidas> lstComidas = CatalogosComidasCache();
+            comidas ComidaResult = lstComidas.Where(m => m.com_id == com_id).FirstOrDefault();
+            return ComidaResult;
         }
 
         protected void ddlCodigosComidas_SelectedIndexChanged(object sender, EventArgs e)
@@ -160,15 +166,53 @@ namespace PCV.WEB.Forms
             int com_id = int.Parse(ddlCodigosComidas.SelectedValue); // com_id
 
             GridViewRow grdVentas = ddlCodigosComidas.NamingContainer as GridViewRow;
+            TextBox txtPrecio = grdVentas.FindControl("txtPrecio") as TextBox;
+            TextBox txtCantidad = grdVentas.FindControl("txtCantidad") as TextBox;
+            TextBox txtSubtotal = grdVentas.FindControl("txtSubtotal") as TextBox;
 
-            ProcterGambleRepository repo = new ProcterGambleRepository();
-            comidas ComidaResult = repo.comidas.Where(m => m.com_id == com_id).FirstOrDefault();
+            comidas ComidaResult = GetComidaById(com_id);
             if (ComidaResult != null)
             {
-                TextBox txtPrecio = grdVentas.FindControl("txtPrecio") as TextBox;
-                if (txtPrecio != null)
+                txtPrecio.Text = ComidaResult.pre_precio.Value.ToString("0.00");
+                int cantidad = 0;
+                cantidad = int.Parse(txtCantidad.Text);
+                txtSubtotal.Text = "" + cantidad * ComidaResult.pre_precio;
+            }
+            else
+            {
+                txtPrecio.Text = "0.00";
+                txtCantidad.Text = "0.00";
+                txtSubtotal.Text = "0.00";
+            }
+
+            RecalcularTotalFooter();
+        }
+
+        public void RecalcularTotalFooter()
+        {
+            decimal Total = 0;
+            foreach (GridViewRow itemRow in grdVentas.Rows)
+            {
+                DropDownList ddlCodigosComidas = itemRow.FindControl("ddlCodigosComidas") as DropDownList;
+                if (ddlCodigosComidas.SelectedValue != "-1") // Con selección
                 {
-                    txtPrecio.Text = ComidaResult.pre_precio.ToString();
+                    TextBox txtCantidad = itemRow.FindControl("txtCantidad") as TextBox;
+                    comidas comidaResult = GetComidaById(int.Parse(ddlCodigosComidas.SelectedValue));
+
+                    if (comidaResult != null)
+                    {
+                        Total += decimal.Parse(txtCantidad.Text) * (decimal)comidaResult.pre_precio.Value;
+                    }
+                }
+            }
+
+            GridViewRow footerRow = grdVentas.FooterRow;
+            if (footerRow != null)
+            {
+                TextBox txtTotal = footerRow.FindControl("txtTotal") as TextBox;
+                if (txtTotal != null)
+                {
+                    txtTotal.Text = ""+ Total;
                 }
             }
         }

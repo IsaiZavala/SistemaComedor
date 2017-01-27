@@ -55,7 +55,6 @@
 <body class="hold-transition skin-blue sidebar-mini">
 
     <form id="form1" runat="server">
-        <asp:ScriptManager runat="server"></asp:ScriptManager>
     <%--<div>
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         </asp:ContentPlaceHolder>
@@ -469,6 +468,7 @@
 
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                <asp:ScriptManager runat="server"></asp:ScriptManager>
             </asp:ContentPlaceHolder>
         </div>
         <!-- /.box-body -->
