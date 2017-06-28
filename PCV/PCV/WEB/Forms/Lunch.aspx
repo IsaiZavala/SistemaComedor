@@ -1,10 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/WEB/Master/master.Master" AutoEventWireup="true" CodeBehind="Lunch.aspx.cs" Inherits="PCV.WEB.Forms.Lunch" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    
+ 
 <div class="row">
     <div class="col-md-2">
         <img src='<%= ResolveUrl("~/Resources/Images/user2-160x160.jpg") %>' />
@@ -125,7 +126,7 @@
                 <div class="col-md-2">
                     <span>SUBS.xTurno($)</span>
                     <br />
-                    <asp:TextBox ID="txtSubsXTurno" Text="0.00" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="txtSubsXTurno" CssClass="form-control" ReadOnly="true" Text="0.00" runat="server"></asp:TextBox>
                 </div>
                 <div class="col-md-1">
                     <span>SUBS. A BLO.($)</span>
@@ -150,10 +151,31 @@
                 <div class="col-md-3"></div>
             </div>
 
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <label class="input-group-addon">Codigo comida</label>
+                        <asp:TextBox ID="txtCodigoComida" MaxLength="10" CssClass="form-control" runat="server" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <label class="input-group-addon">Cantidad</label>
+                        <asp:TextBox ID="txtCantidad" MaxLength="2" CssClass="form-control" Text="1" runat="server" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <asp:Button ID="btnAgregar" Text="Agregar" runat="server" CssClass="btn btn-success" OnClick="btnAgregar_Click" />
+                    </div>
+                </div>
+            </div>
+
             <asp:GridView ID="grdVentas" runat="server" AutoGenerateColumns="false" Width="100%" Height="100px"
                 AlternatingRowStyle-BackColor="#C2D69B" 
                 OnRowDataBound="grdVentas_RowDataBound" 
                 ShowFooter="true"
+                Visible="false"
                 CssClass="table table-bordered bs-table">
                 <FooterStyle BackColor="WhiteSmoke" ForeColor="Black" HorizontalAlign="Center" />
                 <Columns>
@@ -228,10 +250,10 @@
             <div class="row">
                 <div class="col-md-5"></div>
                 <div class="col-md-5">
-                    <asp:Button ID="btnAgregar" Text="Agregar" runat="server" CssClass="btn btn-success" OnClick="btnAgregar_Click" />
+                    
                 </div>
                 <div class="col-md-2">
-                    <asp:Button ID="btnConfirmarCompra" Text="Comprar" CssClass="btn btn-warning" runat="server" />
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal" >Comprar</button>
                 </div>
             </div>
         </div>
@@ -273,6 +295,29 @@
         <div class="col-md-3">
         </div>
     </div>
+</div>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <asp:Button ID="btnAceptar" Text="Aceptar" CssClass="btn btn-success" OnClick="btnAceptar_Click" runat="server" />
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script type="text/javascript">

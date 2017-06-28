@@ -14,5 +14,6 @@ namespace PCV.Models.StoredProceduresClasses
         public string Horario { get; set; }
         public string Subsidio { get; set; }
         public string TipoEmpleado { get; set; }
+        public decimal CantidadSubsidio { get; set; }
     }
 }

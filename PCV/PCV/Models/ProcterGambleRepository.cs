@@ -15,7 +15,7 @@ namespace PCV.Models
         }
 
         public virtual DbSet<comidas> comidas { get; set; }
-        public virtual DbSet<COMIDAS_AUX> COMIDAS_AUX { get; set; }
+        // public virtual DbSet<COMIDAS_AUX> COMIDAS_AUX { get; set; }
         public virtual DbSet<empleados_clasificacion> empleados_clasificacion { get; set; }
         public virtual DbSet<empresas_usuarias> empresas_usuarias { get; set; }
         public virtual DbSet<pedidos> pedidos { get; set; }
@@ -37,9 +37,9 @@ namespace PCV.Models
                 .Property(e => e.upsize_ts)
                 .IsFixedLength();
 
-            modelBuilder.Entity<COMIDAS_AUX>()
-                .Property(e => e.upsize_ts)
-                .IsFixedLength();
+            //modelBuilder.Entity<COMIDAS_AUX>()
+            //    .Property(e => e.upsize_ts)
+            //    .IsFixedLength();
         }
 
         public ConsultaEmpleados ConsultaEmpleados(ConsultaEmpleados finder)

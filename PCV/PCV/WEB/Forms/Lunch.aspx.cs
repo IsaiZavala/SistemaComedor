@@ -19,15 +19,16 @@ namespace PCV.WEB.Forms
         {
             if (!IsPostBack)
             {
-                List<Producto> lstProductos = new List<Producto>();
-                int NumProd = 4;
-                for (int i = 0; i < NumProd; i++)
-                {
-                    lstProductos.Add(new Producto() { Cantidad = 1 });
-                }
+                // Esta parte hacia que se cargaran varias opciones en el grdVentas.
+                //List<Producto> lstProductos = new List<Producto>();
+                //int NumProd = 4;
+                //for (int i = 0; i < NumProd; i++)
+                //{
+                //    lstProductos.Add(new Producto() { Cantidad = 1 });
+                //}
                 
-                grdVentas.DataSource = lstProductos;
-                grdVentas.DataBind();
+                //grdVentas.DataSource = lstProductos;
+                //grdVentas.DataBind();
             }
         }
 
@@ -63,40 +64,71 @@ namespace PCV.WEB.Forms
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
-            List<Producto> lstProductos = new List<Producto>();
+            LoadCodigoComida();
 
-            // Almacenar la infomacion que tiene el grdVentas
+            txtCodigoComida.Text = string.Empty;
+        }
+
+        private void LoadCodigoComida()
+        {
+            ProcterGambleRepository repo = new ProcterGambleRepository();
+            IList<Producto> lstProductos = new List<Producto>();
+
+            // Almacenar los valores guardados que ya existian en el grid
             foreach (GridViewRow itemRow in grdVentas.Rows)
             {
                 DropDownList ddlCodigosComidas = itemRow.FindControl("ddlCodigosComidas") as DropDownList;
                 TextBox txtCantidad = itemRow.FindControl("txtCantidad") as TextBox;
-                
+
                 if (ddlCodigosComidas.SelectedIndex > 0)
                 {
                     // Buscar el nombre del producto
                     int com_id = int.Parse(ddlCodigosComidas.SelectedValue);
                     int cantidad = int.Parse(txtCantidad.Text);
 
-                    ProcterGambleRepository repo = new ProcterGambleRepository();
                     comidas comida = repo.comidas.Where(m => m.com_id == com_id).First();
 
-                    decimal total = (decimal) comida.pre_precio.Value * cantidad;
+                    decimal total = (decimal)comida.pre_precio.Value * cantidad;
 
                     Producto itemProducto =
                     new Producto()
                     {
-                        com_id = com_id
-                        , NombreProducto = comida.com_descripcion
-                        , Cantidad = cantidad
-                        , Precio = (decimal)comida.pre_precio.Value
-                        , Total = total
+                        com_id = com_id,
+                        NombreProducto = comida.com_descripcion,
+                        Cantidad = cantidad,
+                        Precio = (decimal)comida.pre_precio.Value,
+                        Total = total
                     };
 
                     lstProductos.Add(itemProducto);
                 }
             }
 
-            lstProductos.Add(new Producto() { Cantidad = 1 }); // Inicializar la cantidad con uno
+            /* Obtener el codigo de comida y compararlo con los codigos de comidas */
+            string strCodigoComida = txtCodigoComida.Text.Trim();
+            IList<comidas> lstComidas = repo.comidas.Where(m => m.com_codigo == strCodigoComida).ToList();
+            int Cantidad;
+
+            int.TryParse(txtCantidad.Text.Trim(), out Cantidad);
+
+            foreach (comidas comida in lstComidas)
+            {
+                decimal dTotal = (decimal)comida.pre_precio.Value * Cantidad;
+
+                Producto itemProducto =
+                        new Producto()
+                        {
+                            com_id = comida.com_id,
+                            NombreProducto = comida.com_descripcion,
+                            Cantidad = Cantidad,
+                            Precio = (decimal)comida.pre_precio.Value,
+                            Total = dTotal
+                        };
+
+                lstProductos.Add(itemProducto);
+            }
+
+            grdVentas.Visible = true;
             grdVentas.DataSource = lstProductos;
             grdVentas.DataBind();
         }
@@ -127,8 +159,7 @@ namespace PCV.WEB.Forms
                 TextBox txtPrecio = e.Row.FindControl("txtPrecio") as TextBox;
                 TextBox txtSubtotal = e.Row.FindControl("txtSubtotal") as TextBox;
                 DropDownList ddlCodigosComidas = e.Row.FindControl("ddlCodigosComidas") as DropDownList;
-
-
+                
                 if (ddlCodigosComidas != null)
                 {
                     ddlCodigosComidas.DataTextField = "com_descripcion";
@@ -143,13 +174,15 @@ namespace PCV.WEB.Forms
                 {
                     Producto itemProd = e.Row.DataItem as Producto;
                     ddlCodigosComidas.SelectedValue = itemProd.com_id.ToString();
+                    ddlCodigosComidas.Enabled = false;
                     txtCantidad.Text = itemProd.Cantidad.ToString();
+                    txtCantidad.Enabled = false;
                     txtSubtotal.Text = itemProd.Total.ToString("0.00");
                 }
             }
             else if (e.Row.RowType == DataControlRowType.Footer)
             {
-                RecalcularTotalFooter();
+                RecalcularTotalFooter(e);
             }
         }
 
@@ -185,10 +218,10 @@ namespace PCV.WEB.Forms
                 txtSubtotal.Text = "0.00";
             }
 
-            RecalcularTotalFooter();
+            // RecalcularTotalFooter();
         }
 
-        public void RecalcularTotalFooter()
+        public void RecalcularTotalFooter(GridViewRowEventArgs e)
         {
             decimal Total = 0;
             foreach (GridViewRow itemRow in grdVentas.Rows)
@@ -206,15 +239,16 @@ namespace PCV.WEB.Forms
                 }
             }
 
-            GridViewRow footerRow = grdVentas.FooterRow;
-            if (footerRow != null)
+            TextBox txtTotal = e.Row.FindControl("txtTotal") as TextBox;
+            if (txtTotal != null)
             {
-                TextBox txtTotal = footerRow.FindControl("txtTotal") as TextBox;
-                if (txtTotal != null)
-                {
-                    txtTotal.Text = ""+ Total;
-                }
+                txtTotal.Text = ""+ Total;
             }
+        }
+
+        protected void btnAceptar_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
